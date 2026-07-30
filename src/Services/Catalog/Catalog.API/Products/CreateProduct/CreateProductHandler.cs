@@ -19,22 +19,30 @@ namespace Catalog.API.Products.CreateProduct
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
             // Create a new product based on the command object
-            var product = new Product()
+            try
             {
-                Name = command.Name,
-                Category = command.Category,
-                Description = command.Description,
-                ImageFile = command.ImageFile,
-                Price = command.Price
-            };
+                var product = new Product()
+                {
+                    Name = command.Name,
+                    Category = command.Category,
+                    Description = command.Description,
+                    ImageFile = command.ImageFile,
+                    Price = command.Price
+                };
 
-            // Save the product to the database
-            session.Store(product);
-            session.SaveChangesAsync(cancellationToken);
+                // Save the product to the database
+                session.Store(product);
+                await session.SaveChangesAsync(cancellationToken);
 
-            // Return the result with the new product's ID
+                // Return the result with the new product's ID
 
-            return new CreateProductResult(Guid.NewGuid());
+                return new CreateProductResult(product.Id);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }

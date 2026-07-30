@@ -1,0 +1,14 @@
+services:
+  catalogdb:
+    container_name: catalogdb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=CatalogDb
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      # For Postgres 18+ mount the volume at /var/lib/postgresql so the
+      # runtime can create versioned subdirectories (recommended for pg_upgrade).
+      - postgres_catalogdb:/var/lib/postgresql

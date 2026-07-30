@@ -7,6 +7,7 @@
     <UserSecretsId>c616fce2-1835-4ec6-a2ea-20a2b918fc6a</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
+    <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +18,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Products\GetProducts\" />
   </ItemGroup>
 
 </Project>

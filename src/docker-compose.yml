@@ -1,0 +1,16 @@
+services:
+  catalogapi:
+    build:
+      context: .
+      dockerfile: Services/Catalog/Catalog.API/Dockerfile
+    image: catalogapi:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - catalogdb
+  
+  catalogdb:
+    image: postgres:18
+
+volumes:
+  postgres_catalogdb:
