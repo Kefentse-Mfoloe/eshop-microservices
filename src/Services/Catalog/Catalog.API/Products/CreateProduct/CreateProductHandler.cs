@@ -1,8 +1,4 @@
-﻿using BuildingBlocks.CQRS;
-using Catalog.API.Models;
-using Marten;
-
-namespace Catalog.API.Products.CreateProduct
+﻿namespace Catalog.API.Products.CreateProduct
 {
     public record CreateProductCommand(
         string Name,
@@ -13,36 +9,41 @@ namespace Catalog.API.Products.CreateProduct
 
     public record CreateProductResult(Guid Id);
 
-    internal class CreateProductCommandHandler(IDocumentSession session)
+    public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
+    {
+        public CreateProductCommandValidator()
+        {
+            RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
+            RuleFor(x => x.Category).NotEmpty().WithMessage("Category is required");
+            RuleFor(x => x.Description).NotEmpty().WithMessage("Description is required");
+            RuleFor(x => x.ImageFile).NotEmpty().WithMessage("ImageFile is required");
+            RuleFor(x => x.Price).GreaterThan(0).WithMessage("Price must be greater than 0");
+        }
+    }
+
+    internal class CreateProductCommandHandler(IDocumentSession session, Logger<CreateProductCommandHandler> logger)
         : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
         {
-            // Create a new product based on the command object
-            try
+            logger.LogInformation("CreateProductCommandHandler called with @Command", command);
+
+            var product = new Product()
             {
-                var product = new Product()
-                {
-                    Name = command.Name,
-                    Category = command.Category,
-                    Description = command.Description,
-                    ImageFile = command.ImageFile,
-                    Price = command.Price
-                };
+                Name = command.Name,
+                Category = command.Category,
+                Description = command.Description,
+                ImageFile = command.ImageFile,
+                Price = command.Price
+            };
 
-                // Save the product to the database
-                session.Store(product);
-                await session.SaveChangesAsync(cancellationToken);
+            // Save the product to the database
+            session.Store(product);
+            await session.SaveChangesAsync(cancellationToken);
 
-                // Return the result with the new product's ID
+            // Return the result with the new product's ID
 
-                return new CreateProductResult(product.Id);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
+            return new CreateProductResult(product.Id);
         }
     }
 }
