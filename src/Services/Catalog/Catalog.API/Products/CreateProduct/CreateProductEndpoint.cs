@@ -22,6 +22,7 @@
                     return Results.Created($"/products/{response.id}", response);
                 }).WithName("CreateProduct").Produces<CreateProductResponse>()
                 .ProducesProblem(StatusCodes.Status400BadRequest)
+                .ProducesProblem(StatusCodes.Status500InternalServerError)
                 .WithSummary("Create Product")
                 .WithDescription("Create Product");
         }
