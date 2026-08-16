@@ -1,16 +1,22 @@
 services:
-  catalogapi:
-    build:
-      context: .
-      dockerfile: Services/Catalog/Catalog.API/Dockerfile
-    image: catalogapi:latest
-    ports:
-      - "8080:8080"
-    depends_on:
-      - catalogdb
-  
+  # catalogapi:
+  #   build:
+  #     context: .
+  #     dockerfile: Services/Catalog/Catalog.API/Dockerfile
+  #   image: catalogapi:latest
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - catalogdb
   catalogdb:
     image: postgres:18
 
+  catalog.api:
+    image: ${DOCKER_REGISTRY-}catalogapi
+    build:
+      context: .
+      dockerfile: Services/Catalog/Catalog.API/Dockerfile
+
 volumes:
   postgres_catalogdb:
+
