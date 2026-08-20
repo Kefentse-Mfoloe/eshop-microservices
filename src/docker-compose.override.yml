@@ -13,6 +13,20 @@ services:
       # runtime can create versioned subdirectories (recommended for pg_upgrade).
       - postgres_catalogdb:/var/lib/postgresql
 
+  basketdb:
+    container_name: basketdb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=BasketDb
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      # For Postgres 18+ mount the volume at /var/lib/postgresql so the
+      # runtime can create versioned subdirectories (recommended for pg_upgrade).
+      - postgres_basketdb:/var/lib/postgresql
+
   catalog.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
